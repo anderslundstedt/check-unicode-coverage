@@ -44,6 +44,28 @@
           ];
         }
       );
+
+      defaultPackage = forAllSystems(system:
+        let
+          nixpkgs    = get-nixpkgs-for-system    system;
+          python-env = get-python-env-for-system system;
+        in (
+          nixpkgs.stdenv.mkDerivation {
+            name = "check-unicode-coverage-${version}";
+
+            buildInputs = [nixpkgs.makeWrapper];
+
+            unpackPhase = "true";
+
+            installPhase = ''
+              mkdir -p $out/bin
+              cp ${./check-unicode-coverage.py} $out/check-unicode-coverage
+              cp ${./characters.txt} $out/characters.txt
+              makeWrapper $out/check-unicode-coverage $out/bin/check-unicode-coverage --set PATH ${nixpkgs.lib.makeBinPath [python-env]}
+            '';
+          }
+        )
+      );
     }
   );
 }
