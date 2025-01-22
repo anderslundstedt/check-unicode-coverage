@@ -38,11 +38,18 @@
       );
     in {
       devShell = forAllSystems(system:
-        (get-nixpkgs-for-system system).mkShell {
-          buildInputs = [
-            (get-python-env-for-system system)
-          ];
-        }
+        let
+          nixpkgs     = get-nixpkgs-for-system    system;
+          python-env  = get-python-env-for-system system;
+        in (
+          nixpkgs.mkShell {
+            buildInputs = [
+              python-env
+              nixpkgs.gh
+              nixpkgs.gh-markdown-preview
+            ];
+          }
+        )
       );
 
       defaultPackage = forAllSystems(system:

@@ -10,6 +10,9 @@ MAKEFLAGS += --no-builtin-rules
 build:
 	nix build
 
+preview-readme:
+	gh-markdown-preview
+
 update-flake:
 	nix flake update
 
