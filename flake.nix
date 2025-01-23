@@ -29,9 +29,10 @@
       get-nixpkgs-for-system = system:
         (import inputs.nixpkgs {inherit system;});
 
-      get-python-env-for-system = system: (
+      get-python-env-for-system = system: is-dev-shell: (
         (get-nixpkgs-for-system system).python3.withPackages (
-          python-packages: [
+          python-packages: builtins.filter(x: x != 0) [
+            (if is-dev-shell then python-packages.ipython else 0)
             python-packages.python-fontconfig
           ]
         )
@@ -40,7 +41,7 @@
       devShell = forAllSystems(system:
         let
           nixpkgs     = get-nixpkgs-for-system    system;
-          python-env  = get-python-env-for-system system;
+          python-env  = get-python-env-for-system system true;
         in (
           nixpkgs.mkShell {
             buildInputs = [
@@ -55,7 +56,7 @@
       defaultPackage = forAllSystems(system:
         let
           nixpkgs    = get-nixpkgs-for-system    system;
-          python-env = get-python-env-for-system system;
+          python-env = get-python-env-for-system system false;
         in (
           nixpkgs.stdenv.mkDerivation {
             name = "check-unicode-coverage-${version}";
