@@ -46,6 +46,7 @@
           nixpkgs.mkShell {
             buildInputs = [
               python-env
+              nixpkgs.pyright
               nixpkgs.gh
               nixpkgs.gh-markdown-preview
             ];

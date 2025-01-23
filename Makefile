@@ -13,6 +13,9 @@ build:
 preview-readme:
 	gh-markdown-preview
 
+type-check:
+	pyright *.py
+
 update-flake:
 	nix flake update
 
