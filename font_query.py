@@ -47,7 +47,7 @@ def has_char(font: t_font, c: str) -> O[bool]:
         return False
 
 """
-returns the number n of code points covered
+returns the number of code points covered
 """
 def count_chars(font: t_font) -> int:
     return font.f.count_chars()
