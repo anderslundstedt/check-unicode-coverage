@@ -12,9 +12,9 @@ import sys
 from typing import Dict as D, Final as F, Iterable as I, List as L
 
 
-## EXTERNAL PACKAGES
+## INTERNAL PACKAGES
 
-import fontconfig as fc
+import font_query as fq
 
 
 
@@ -92,36 +92,18 @@ del exit_code
 
 ## CREATE FONT OBJECTS FROM THE FONT PATHS
 
-fonts : F[L[fc.FcFont]] = [fc.FcFont(p) for p in font_paths]
-
-
-## VERIFY THAT EACH FONT OBJECT CORRECTLY REPRESENTS A FONT FILE
-
 exit_code : int = 0
-for font in fonts:
-    if font.count_chars() == 0:
-        print(
-            (
-                f'error: {font.file} is not a file supported by fontconfig'
-                +
-                ', '
-                +
-                'or is a font with no characters'
-            ),
-            file=sys.stderr
-        )
+fonts : F[L[fq.t_font]] = []
+for p in font_paths:
+    f = fq.get_font(p)
+    if f is None:
+        print(f'error: {p} is not a file supported by fontconfig')
         exit_code = 6
+    else:
+        fonts.append(f)
 if exit_code != 0:
     sys.exit(exit_code)
 del exit_code
-
-
-# HELPER GET_NAME : FC.FCFONT -> STR
-
-def get_name(font: fc.FcFont) -> str:
-    assert len(font.fullname) > 0, font.file
-    assert font.fullname[0] is not None, font.file
-    return font.fullname[0][1]
 
 
 
@@ -129,7 +111,7 @@ def get_name(font: fc.FcFont) -> str:
 
 ## FONT_NAMES
 
-font_names : F[L[str]] = [get_name(f) for f in fonts]
+font_names : F[L[str]] = [fq.get_name(f) for f in fonts]
 
 
 ## CHECK NO DUPLICATE FONT NAMES
@@ -137,10 +119,11 @@ font_names : F[L[str]] = [get_name(f) for f in fonts]
 if not len(set(font_names)) == len(font_names):
     print('error: duplicate font names', file=sys.stderr)
     for f in fonts:
-        names : F[I[str]] = list(filter(lambda n: n == get_name(f), font_names))
+        name : F[str] = fq.get_name(f)
+        names : F[I[str]] = list(filter(lambda n: n == name, font_names))
         assert len(names) > 0, names
         if len(names) > 1:
-            print(f'name of font {f.file}: ‘{get_name(f)}’', file=sys.stderr)
+            print(f'name of font {fq.get_path(f)}: ‘{fq.get_name(f)}’', file=sys.stderr)
         del names
     sys.exit(2)
 
@@ -162,16 +145,16 @@ del tmp_chars
 
 ## PRESENT CHARACTERS BY FONT
 
-present_chars_by_font : D[fc.FcFont,L[str]] = {
+present_chars_by_font : D[fq.t_font,L[str]] = {
     f: [
-        c for c in chars if f.has_char(c)
+        c for c in chars if fq.has_char(f, c)
     ]
     for f in fonts
 }
 
 ## MISSING CHARS BY FONT
 
-missing_chars_by_font : F[D[fc.FcFont,L[str]]] = {
+missing_chars_by_font : F[D[fq.t_font,L[str]]] = {
     font: [c for c in chars if c not in found_chars]
     for
     font,found_chars in present_chars_by_font.items()
@@ -180,7 +163,7 @@ missing_chars_by_font : F[D[fc.FcFont,L[str]]] = {
 
 ## NO OF PRESENT CHARS BY FONT
 
-no_of_present_chars_by_font : F[D[fc.FcFont,int]] = {
+no_of_present_chars_by_font : F[D[fq.t_font,int]] = {
     font: len(found_chars)
     for
     font,found_chars in present_chars_by_font.items()
@@ -189,7 +172,7 @@ no_of_present_chars_by_font : F[D[fc.FcFont,int]] = {
 
 ## NO OF MISSING CHARS BY FONT
 
-no_of_missing_chars_by_font : F[D[fc.FcFont,int]] = {
+no_of_missing_chars_by_font : F[D[fq.t_font,int]] = {
     font: len(missing_chars)
     for
     font,missing_chars in missing_chars_by_font.items()
@@ -201,7 +184,7 @@ no_of_missing_chars_by_font : F[D[fc.FcFont,int]] = {
 
 for font in fonts:
     print(
-        f'{get_name(font)}:'
+        f'{fq.get_name(font)}:'
         f'{no_of_present_chars_by_font[font]} characters found,',
         f'{no_of_missing_chars_by_font[font]} characters missing'
     )

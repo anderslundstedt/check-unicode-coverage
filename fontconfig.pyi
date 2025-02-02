@@ -23,8 +23,6 @@ class FcFont:
     # how to correctly type hint that the empty list may be returned?
     """
 
-    def __init__(self: FcFont, path: str) -> None: ...
-
     """
     returns the number n of code points covered
     note: n = 0 if the instance was created with a path not representing a font
@@ -38,3 +36,5 @@ class FcFont:
     font file parseable by fontconfig
     """
     def has_char(self, c: str) -> bool: ...
+
+    def __init__(self: FcFont, path: str) -> None: ...

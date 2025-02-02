@@ -69,6 +69,7 @@
             installPhase = ''
               mkdir -p $out/bin
               cp ${./check-unicode-coverage.py} $out/check-unicode-coverage
+              cp ${./font_query.py}             $out/font_query.py
               cp ${./characters.txt} $out/characters.txt
               makeWrapper $out/check-unicode-coverage $out/bin/check-unicode-coverage --set PATH ${nixpkgs.lib.makeBinPath [python-env]}
             '';
