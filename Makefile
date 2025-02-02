@@ -22,3 +22,4 @@ update-flake:
 clean:
 	rm -rf .direnv
 	rm -rf ./result
+	rm -rf ./__pycache__
