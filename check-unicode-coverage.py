@@ -69,19 +69,19 @@ if not len(set(font_paths)) == len(font_paths):
 
 ## FONT_BY_FONT_PATH, FONT_NAME_BY_FONT_PATH, FONT_BY_FONT_NAME, FONT_NAMES
 
-font_by_font_path : F[D[str,fc.FcFont]] = { # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
-    font_path: fc.FcFont(font_path) # pyright: ignore[reportUnknownMemberType]
+font_by_font_path : F[D[str,fc.FcFont]] = {
+    font_path: fc.FcFont(font_path)
     for
     font_path in font_paths
 }
 
 font_name_by_font_path : F[D[str,str]] = {
-    font_path: font_by_font_path[font_path].fullname[0][1] # pyright: ignore[reportUnknownMemberType]
+    font_path: font_by_font_path[font_path].fullname[0][1] # pyright: ignore[reportOptionalSubscript]
     for
     font_path in font_paths
 }
 
-font_by_font_name : F[D[str,fc.FcFont]] = { # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
+font_by_font_name : F[D[str,fc.FcFont]] = {
     font_name: font_by_font_path[font_path]
     for
     font_path,font_name in font_name_by_font_path.items()
@@ -125,9 +125,9 @@ del tmp_chars
 
 found_chars_by_font_name : D[str,L[str]] = {
     font_name: [
-        c for c in chars if font.has_char(c) # pyright: ignore[reportUnknownMemberType]
+        c for c in chars if font.has_char(c)
     ]
-    for font_name,font in font_by_font_name.items() # pyright: ignore[reportUnknownVariableType]
+    for font_name,font in font_by_font_name.items()
 }
 
 missing_chars_by_font_name : F[D[str,L[str]]] = {
