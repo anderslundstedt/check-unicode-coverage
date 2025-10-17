@@ -27,7 +27,7 @@ Pull requests updating this README are very welcome!
   ```
 
 - Without a flake-enabled nixpkgs install: the Python script
-  `check-unicode-coverage.py` ought to run in most Python 3 environments that
+  `check-unicode-coverage.py` ought to run in most Python 3.12 environments that
   has the [`Python-fontconfig`](https://github.com/vayn/python-fontconfig)
   package providing Python bindings for
   [`FontConfig`](https://www.freedesktop.org/wiki/Software/fontconfig/).
