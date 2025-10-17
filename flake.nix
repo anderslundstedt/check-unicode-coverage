@@ -3,9 +3,11 @@
 {
   description = "CLI tool to check fonts' Unicode coverage";
 
-  inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+  inputs.nixpkgs.url              = "nixpkgs/nixpkgs-unstable";
+  inputs.nixpkgs-24-11-linux.url  = "nixpkgs/nixos-24.11";
+  inputs.nixpkgs-24-11-darwin.url = "nixpkgs/nixpkgs-24.11-darwin";
 
-  outputs = inputs@{self, nixpkgs}: (
+  outputs = inputs@{self, nixpkgs, nixpkgs-24-11-linux, nixpkgs-24-11-darwin}: (
     let
       # to work with older version of flakes
       lastModifiedDate =
@@ -15,22 +17,25 @@
       version = builtins.substring 0 8 lastModifiedDate;
 
       # confirmed to work on the following systems
-      supportedSystems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      systems-linux    = ["x86_64-linux"  "aarch64-linux"];
+      systems-darwin   = ["x86_64-darwin" "aarch64-darwin"];
+      supportedSystems = systems-linux ++ systems-darwin;
+
+      get-nixpkgs-for-system = (system:
+        if builtins.elem system systems-linux then
+          (import nixpkgs-24-11-linux {inherit system;})
+        else if builtins.elem system systems-darwin then
+          (import nixpkgs-24-11-darwin {inherit system;})
+        else
+          throw "no nixpkgs configured for ${system}"
+      );
 
       # helper function to generate an attrset
       # '{ x86_64-linux = f "x86_64-linux"; ... }'.
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
-      get-nixpkgs-for-system = system:
-        (import inputs.nixpkgs {inherit system;});
-
       get-python-env-for-system = system: is-dev-shell: (
-        (get-nixpkgs-for-system system).python3.withPackages (
+        (get-nixpkgs-for-system system).python312.withPackages (
           python-packages: builtins.filter(x: x != 0) [
             (if is-dev-shell then python-packages.ipython else 0)
             python-packages.python-fontconfig
@@ -70,7 +75,7 @@
               mkdir -p $out/bin
               cp ${./check-unicode-coverage.py} $out/check-unicode-coverage
               cp ${./font_query.py}             $out/font_query.py
-              cp ${./characters.txt} $out/characters.txt
+              cp ${./characters.txt}            $out/characters.txt
               makeWrapper $out/check-unicode-coverage $out/bin/check-unicode-coverage --set PATH ${nixpkgs.lib.makeBinPath [python-env]}
             '';
           }
