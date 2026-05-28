@@ -3,11 +3,11 @@
 {
   description = "CLI tool to check fonts' Unicode coverage";
 
-  inputs.nixpkgs.url              = "nixpkgs/nixpkgs-unstable";
+  inputs.nixpkgs-unstable.url     = "nixpkgs/nixpkgs-unstable";
   inputs.nixpkgs-24-11-linux.url  = "nixpkgs/nixos-24.11";
   inputs.nixpkgs-24-11-darwin.url = "nixpkgs/nixpkgs-24.11-darwin";
 
-  outputs = inputs@{self, nixpkgs, nixpkgs-24-11-linux, nixpkgs-24-11-darwin}: (
+  outputs = {self,nixpkgs-unstable,nixpkgs-24-11-linux,nixpkgs-24-11-darwin}: (
     let
       # to work with older version of flakes
       lastModifiedDate =
@@ -32,7 +32,7 @@
 
       # helper function to generate an attrset
       # '{ x86_64-linux = f "x86_64-linux"; ... }'.
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      forAllSystems = nixpkgs-unstable.lib.genAttrs supportedSystems;
 
       get-python-env-for-system = system: is-dev-shell: (
         (get-nixpkgs-for-system system).python312.withPackages (
