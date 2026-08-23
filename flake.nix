@@ -3,11 +3,19 @@
 {
   description = "CLI tool to check fonts' Unicode coverage";
 
-  inputs.nixpkgs-unstable.url     = "nixpkgs/nixpkgs-unstable";
-  inputs.nixpkgs-24-11-linux.url  = "nixpkgs/nixos-24.11";
-  inputs.nixpkgs-24-11-darwin.url = "nixpkgs/nixpkgs-24.11-darwin";
+  inputs.pins.url = "github:anderslundstedt/nix-pins";
 
-  outputs = {self,nixpkgs-unstable,nixpkgs-24-11-linux,nixpkgs-24-11-darwin}: (
+  inputs.nixpkgs-unstable.follows     = "pins/nixpkgs-unstable";
+  inputs.nixpkgs-linux-24-11.follows  = "pins/nixos-24-11";
+  inputs.nixpkgs-darwin-24-11.follows = "pins/nixpkgs-darwin-24-11";
+
+  outputs = {
+    self,
+    nixpkgs-unstable,
+    nixpkgs-linux-24-11,
+    nixpkgs-darwin-24-11,
+    ...
+  }: (
     let
       # to work with older version of flakes
       lastModifiedDate =
@@ -23,9 +31,9 @@
 
       get-nixpkgs-for-system = (system:
         if builtins.elem system systems-linux then
-          (import nixpkgs-24-11-linux {inherit system;})
+          (import nixpkgs-linux-24-11 {inherit system;})
         else if builtins.elem system systems-darwin then
-          (import nixpkgs-24-11-darwin {inherit system;})
+          (import nixpkgs-darwin-24-11 {inherit system;})
         else
           throw "no nixpkgs configured for ${system}"
       );
