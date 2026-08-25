@@ -5,17 +5,9 @@
 
   inputs.pins.url = "github:anderslundstedt/nix-pins";
 
-  inputs.nixpkgs-unstable.follows     = "pins/nixpkgs-unstable";
-  inputs.nixpkgs-linux-24-11.follows  = "pins/nixos-24-11";
-  inputs.nixpkgs-darwin-24-11.follows = "pins/nixpkgs-darwin-24-11";
+  inputs.nixpkgs-unstable.follows = "pins/nixpkgs-unstable";
 
-  outputs = {
-    self,
-    nixpkgs-unstable,
-    nixpkgs-linux-24-11,
-    nixpkgs-darwin-24-11,
-    ...
-  }: (
+  outputs = inputs@{self,...}: (
     let
       # to work with older version of flakes
       lastModifiedDate =
@@ -29,21 +21,15 @@
       systems-darwin   = ["x86_64-darwin" "aarch64-darwin"];
       supportedSystems = systems-linux ++ systems-darwin;
 
-      get-nixpkgs-for-system = (system:
-        if builtins.elem system systems-linux then
-          (import nixpkgs-linux-24-11 {inherit system;})
-        else if builtins.elem system systems-darwin then
-          (import nixpkgs-darwin-24-11 {inherit system;})
-        else
-          throw "no nixpkgs configured for ${system}"
-      );
-
       # helper function to generate an attrset
       # '{ x86_64-linux = f "x86_64-linux"; ... }'.
-      forAllSystems = nixpkgs-unstable.lib.genAttrs supportedSystems;
+      forAllSystems = inputs.nixpkgs-unstable.lib.genAttrs supportedSystems;
 
-      get-python-env-for-system = system: is-dev-shell: (
-        (get-nixpkgs-for-system system).python312.withPackages (
+      get-pkgs-for-system = system:
+        inputs.pins.nixpkgs-24-11.${system}.legacyPackages.${system};
+
+      get-python-env-for-system = pkgs: system: is-dev-shell: (
+        pkgs.python312.withPackages (
           python-packages: builtins.filter(x: x != 0) [
             (if is-dev-shell then python-packages.ipython else 0)
             python-packages.python-fontconfig
@@ -53,15 +39,16 @@
     in {
       devShell = forAllSystems(system:
         let
-          nixpkgs     = get-nixpkgs-for-system    system;
-          python-env  = get-python-env-for-system system true;
+          pkgs-24-11    = get-pkgs-for-system system;
+          python-env    = get-python-env-for-system pkgs-24-11 system true;
+          pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${system};
         in (
-          nixpkgs.mkShell {
+          pkgs-unstable.mkShell {
             buildInputs = [
               python-env
-              nixpkgs.pyright
-              nixpkgs.gh
-              nixpkgs.gh-markdown-preview
+              pkgs-unstable.pyright
+              pkgs-unstable.gh
+              pkgs-unstable.gh-markdown-preview
             ];
           }
         )
@@ -69,13 +56,14 @@
 
       defaultPackage = forAllSystems(system:
         let
-          nixpkgs    = get-nixpkgs-for-system    system;
-          python-env = get-python-env-for-system system false;
+          pkgs-24-11    = get-pkgs-for-system system;
+          python-env    = get-python-env-for-system pkgs-24-11 system false;
+          pkgs-unstable = inputs.nixpkgs-unstable.legacyPackages.${system};
         in (
-          nixpkgs.stdenv.mkDerivation {
+          pkgs-unstable.stdenv.mkDerivation {
             name = "check-unicode-coverage-${version}";
 
-            buildInputs = [nixpkgs.makeWrapper];
+            buildInputs = [pkgs-unstable.makeWrapper];
 
             unpackPhase = "true";
 
@@ -84,7 +72,7 @@
               cp ${./check-unicode-coverage.py} $out/check-unicode-coverage
               cp ${./font_query.py}             $out/font_query.py
               cp ${./characters.txt}            $out/characters.txt
-              makeWrapper $out/check-unicode-coverage $out/bin/check-unicode-coverage --set PATH ${nixpkgs.lib.makeBinPath [python-env]}
+              makeWrapper $out/check-unicode-coverage $out/bin/check-unicode-coverage --set PATH ${inputs.nixpkgs-unstable.lib.makeBinPath [python-env]}
             '';
           }
         )

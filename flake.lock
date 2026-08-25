@@ -17,7 +17,25 @@
         "type": "github"
       }
     },
-    "home-manager-darwin": {
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "home-manager-darwin-stable": {
       "inputs": {
         "nixpkgs": [
           "pins",
@@ -25,20 +43,21 @@
         ]
       },
       "locked": {
-        "lastModified": 1787487906,
-        "narHash": "sha256-zIdM+8teujHm5hc5MIPDnV7k2UeOOT/pFyFtWjOCwsY=",
+        "lastModified": 1787377438,
+        "narHash": "sha256-Sxu1NLTD/Ern6hFGLlZmtKCSct3YQXZI/lls8RE1XeM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "cfba7ad5886b342b8dd63ba74354b3853ea4cfc9",
+        "rev": "65258d5c65a250189fde2e35f490d15e064c4c62",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
+        "ref": "release-26.05",
         "repo": "home-manager",
         "type": "github"
       }
     },
-    "home-manager-linux": {
+    "home-manager-linux-stable": {
       "inputs": {
         "nixpkgs": [
           "pins",
@@ -46,15 +65,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1787487906,
-        "narHash": "sha256-zIdM+8teujHm5hc5MIPDnV7k2UeOOT/pFyFtWjOCwsY=",
+        "lastModified": 1787377438,
+        "narHash": "sha256-Sxu1NLTD/Ern6hFGLlZmtKCSct3YQXZI/lls8RE1XeM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "cfba7ad5886b342b8dd63ba74354b3853ea4cfc9",
+        "rev": "65258d5c65a250189fde2e35f490d15e064c4c62",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
+        "ref": "release-26.05",
         "repo": "home-manager",
         "type": "github"
       }
@@ -91,7 +111,7 @@
         "type": "github"
       }
     },
-    "nix-darwin": {
+    "nix-auto-follow-darwin": {
       "inputs": {
         "nixpkgs": [
           "pins",
@@ -99,15 +119,58 @@
         ]
       },
       "locked": {
-        "lastModified": 1786845137,
-        "narHash": "sha256-oQFip+v0luP8NIxJzmiW4Wu8bILsbFWom5l0zonl8hQ=",
-        "owner": "LnL7",
-        "repo": "nix-darwin",
-        "rev": "4cff07de74b50e64bdd68cd4e722ab5b6b35ee48",
+        "lastModified": 1782404455,
+        "narHash": "sha256-yJvy+JrrHxkl+XWZFQo/5o8WSNPUI0O+2yoT2CFKgbI=",
+        "owner": "fzakaria",
+        "repo": "nix-auto-follow",
+        "rev": "83f2b736b2705e536eff7e5075e7b15fba12cb22",
         "type": "github"
       },
       "original": {
-        "owner": "LnL7",
+        "owner": "fzakaria",
+        "repo": "nix-auto-follow",
+        "type": "github"
+      }
+    },
+    "nix-auto-follow-linux": {
+      "inputs": {
+        "nixpkgs": [
+          "pins",
+          "nixos-stable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782404455,
+        "narHash": "sha256-yJvy+JrrHxkl+XWZFQo/5o8WSNPUI0O+2yoT2CFKgbI=",
+        "owner": "fzakaria",
+        "repo": "nix-auto-follow",
+        "rev": "83f2b736b2705e536eff7e5075e7b15fba12cb22",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fzakaria",
+        "repo": "nix-auto-follow",
+        "type": "github"
+      }
+    },
+    "nix-darwin-stable": {
+      "inputs": {
+        "nixpkgs": [
+          "pins",
+          "nixpkgs-darwin-stable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783744694,
+        "narHash": "sha256-2cp6N3rrwnGYLTx9l6N+NI+kwrCWxvJUbj5WJhvB29A=",
+        "owner": "nix-darwin",
+        "repo": "nix-darwin",
+        "rev": "c3e90c89649b07d1a96e4b9dd6cd0d6e44b91a74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-darwin",
+        "ref": "nix-darwin-26.05",
         "repo": "nix-darwin",
         "type": "github"
       }
@@ -244,11 +307,14 @@
     },
     "pins": {
       "inputs": {
-        "home-manager-darwin": "home-manager-darwin",
-        "home-manager-linux": "home-manager-linux",
+        "flake-utils": "flake-utils",
+        "home-manager-darwin-stable": "home-manager-darwin-stable",
+        "home-manager-linux-stable": "home-manager-linux-stable",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
-        "nix-darwin": "nix-darwin",
+        "nix-auto-follow-darwin": "nix-auto-follow-darwin",
+        "nix-auto-follow-linux": "nix-auto-follow-linux",
+        "nix-darwin-stable": "nix-darwin-stable",
         "nix-homebrew": "nix-homebrew",
         "nixos-24-11": "nixos-24-11",
         "nixos-25-11": "nixos-25-11",
@@ -259,11 +325,11 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1787511256,
-        "narHash": "sha256-TQ8QCF8PouMBb/gkXCIazFJac/K/ZLoEkAF393O+2Ps=",
+        "lastModified": 1787617017,
+        "narHash": "sha256-q7inOcQrJSK7ebbsIMU2x2CpYEl77hMOM3HJmSPEYUs=",
         "owner": "anderslundstedt",
         "repo": "nix-pins",
-        "rev": "8c7a5bbeb6d82815879f2f8af977ffbe237e0100",
+        "rev": "a895bcdbed553c6b865d9098d622fc1a4a81b830",
         "type": "github"
       },
       "original": {
@@ -274,19 +340,26 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs-darwin-24-11": [
-          "pins",
-          "nixpkgs-darwin-24-11"
-        ],
-        "nixpkgs-linux-24-11": [
-          "pins",
-          "nixos-24-11"
-        ],
         "nixpkgs-unstable": [
           "pins",
           "nixpkgs-unstable"
         ],
         "pins": "pins"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
       }
     }
   },
