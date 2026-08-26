@@ -325,11 +325,11 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1787617017,
-        "narHash": "sha256-q7inOcQrJSK7ebbsIMU2x2CpYEl77hMOM3HJmSPEYUs=",
+        "lastModified": 1787669454,
+        "narHash": "sha256-a2Gdg3E6apHolQ2HmHjmdeVBanVw5pyCaKfvb6yT+Mw=",
         "owner": "anderslundstedt",
         "repo": "nix-pins",
-        "rev": "a895bcdbed553c6b865d9098d622fc1a4a81b830",
+        "rev": "68ee5bf0ccc8651b9479c975568ce572f40f0556",
         "type": "github"
       },
       "original": {
@@ -340,6 +340,10 @@
     },
     "root": {
       "inputs": {
+        "flake-utils": [
+          "pins",
+          "flake-utils"
+        ],
         "nixpkgs-unstable": [
           "pins",
           "nixpkgs-unstable"
