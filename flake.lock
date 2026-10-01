@@ -236,6 +236,23 @@
         "type": "github"
       }
     },
+    "lean-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776815402,
+        "narHash": "sha256-AYClc7+z+0h5QfVGPGr7ZrzPuaD+IAMtHT/3ZnbSVLE=",
+        "owner": "Julian",
+        "repo": "lean.nvim",
+        "rev": "b7b330a9dd324c0d9d57bb7d9dcbaf871403d3ed",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Julian",
+        "ref": "v2026.4.1",
+        "repo": "lean.nvim",
+        "type": "github"
+      }
+    },
     "nix": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -520,6 +537,7 @@
         "home-manager-linux-stable": "home-manager-linux-stable",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
+        "lean-nvim": "lean-nvim",
         "nix-auto-follow-darwin": "nix-auto-follow-darwin",
         "nix-auto-follow-linux": "nix-auto-follow-linux",
         "nix-darwin-stable": "nix-darwin-stable",
@@ -534,11 +552,11 @@
         "nixpkgs-unstable": "nixpkgs-unstable"
       },
       "locked": {
-        "lastModified": 1790798416,
-        "narHash": "sha256-tBiju3ePP8p9KeZEKcTfKHZHlO0JEowz61dyaUx3nwQ=",
+        "lastModified": 1790868818,
+        "narHash": "sha256-jbaxP0pSI+80/5zzJIi1l8rqYCNwcisedatvPBbILVA=",
         "owner": "anderslundstedt",
         "repo": "nix-pins",
-        "rev": "00f4c3768817f80625eee6d8e188799e04d31558",
+        "rev": "40c353931f21223aa4103e940461624ce5a41fd8",
         "type": "github"
       },
       "original": {
